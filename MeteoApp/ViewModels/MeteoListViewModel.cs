@@ -16,19 +16,9 @@ namespace MeteoApp
             }
         }
 
-        public MeteoListViewModel()
+        public MeteoListViewModel(List<Entry> entries)
         {
-            Entries = new ObservableCollection<Entry>();
-
-            for (var i = 0; i < 10; i++)
-            {
-                var e = new Entry
-                {
-                    Id = i
-                };
-
-                Entries.Add(e);
-            }
+            Entries = new ObservableCollection<Entry>(entries);
         }
     }
 }
