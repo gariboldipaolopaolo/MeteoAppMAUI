@@ -77,10 +77,16 @@
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="MeteoItemPage.xaml">
 	    <SubType>Designer</SubType>
 	  </MauiXaml>
+	  <MauiXaml Update="MeteoAddCity.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="MeteoListPage.xaml.cs">
 	    <DependentUpon>MeteoListPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="MeteoAddCity.xaml.cs">
+	    <DependentUpon>MeteoAddCity.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionMeteoAppMauiHideInfoBar="True" /></VisualStudio></ProjectExtensions>

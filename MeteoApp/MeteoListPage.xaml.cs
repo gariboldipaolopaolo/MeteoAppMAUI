@@ -12,41 +12,12 @@ public partial class MeteoListPage : Shell
 	{
 		InitializeComponent();
         RegisterRoutes();
-        //GetLocation();
-        GetLocalEntries();
-        //database = new LocationDatabase();
+        GetLocation();
+        database = new LocationDatabase();
 
-        //var entries = GetEntries();
-       
-    }
+        var entries = GetEntries();
+        BindingContext = new MeteoListViewModel(entries);
 
-    private async void GetLocalEntries()
-    {
-        var entries = new List<Entry>();
-        try
-        {
-            var loc = await Geolocation.Default.GetLocationAsync();
-            if (loc != null)
-            {
-                Console.WriteLine($"{loc.Latitude} {loc.Longitude}{loc.Altitude}");
-                
-
-                entries.Add(new Entry
-                {
-                    Name = "My position",
-                    Longitude = loc.Longitude,
-                    Latitude = loc.Latitude,
-                });
-
-
-                BindingContext = new MeteoListViewModel(entries);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
     }
 
     private List<Entry> GetEntries()
@@ -101,11 +72,6 @@ public partial class MeteoListPage : Shell
 
     private void OnItemAdded(object sender, EventArgs e)
     {
-         _ = ShowPrompt();
-    }
-
-    private async Task ShowPrompt()
-    {
-        await DisplayAlert("Add City", "To Be Implemented", "OK");
+         Navigation.PushAsync(new MeteoAddCity());
     }
 }
