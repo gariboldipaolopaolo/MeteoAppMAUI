@@ -9,15 +9,30 @@ public partial class MeteoListPage : Shell
     public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
 
     public MeteoListPage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         RegisterRoutes();
-        GetLocation();
+        GetLocation(); 
         database = new LocationDatabase();
 
         var entries = GetEntries();
         BindingContext = new MeteoListViewModel(entries);
 
+        entries.Add(new Entry
+        {
+            Name = "Livigno",
+            Longitude = 10.1357,
+            Latitude = 46.5386,
+        });
+
+        entries.Add(new Entry
+        {
+            Name = "Buguggiate",
+            Longitude = 8.8538,
+            Latitude = 45.8088,
+        });
+
+        BindingContext = new MeteoListViewModel(entries);
     }
 
     private List<Entry> GetEntries()
@@ -41,7 +56,7 @@ public partial class MeteoListPage : Shell
                 });
             }
 
-        }catch(Exception ex)
+        } catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
@@ -52,7 +67,10 @@ public partial class MeteoListPage : Shell
         Routes.Add("entrydetails", typeof(MeteoItemPage));
 
         foreach (var item in Routes)
+        {
+            Console.WriteLine($"MeteoListPage: {item}");
             Routing.RegisterRoute(item.Key, item.Value);
+        }
     }
 
     private void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -72,6 +90,6 @@ public partial class MeteoListPage : Shell
 
     private void OnItemAdded(object sender, EventArgs e)
     {
-         Navigation.PushAsync(new MeteoAddCity());
+        Navigation.PushAsync(new MeteoAddCity());
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace MeteoApp;
+﻿using System.Globalization;
+
+namespace MeteoApp;
 
 [QueryProperty(nameof(Entry), "Entry")]
 public partial class MeteoItemPage : ContentPage
 {
-    RestService _restService;
+    readonly RestService _restService;
     Entry entry;
+    WeatherData weatherData = new();
     public Entry Entry
     {
         get => entry;
@@ -22,28 +25,29 @@ public partial class MeteoItemPage : ContentPage
         BindingContext = this;
     }
 
-    async void OnGetWeatherButtonClicked(object sender, EventArgs e)
-    {
-        if (!string.IsNullOrWhiteSpace("lat=46.5386&lon=10.1357"))
-        {
-            WeatherData weatherData = await
-                _restService.
-                GetWeatherData(GenerateRequestURL(Constants.OpenWeatherMapEndpoint));
-
-            BindingContext = weatherData;
-        }
-    }
-    string GenerateRequestURL(string endPoint)
-    {
-        string requestUri = endPoint;
-        requestUri += $"?q={"lat=46.5386&lon=10.1357"}";
-        requestUri += "&units=metric";
-        requestUri += $"&APPID={Constants.OpenWeatherMapAPIKey}";
-        return requestUri;
-    }
-
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        GetWeather();
+    }
+
+    async void GetWeather(){
+            weatherData = await
+                _restService.
+                GetWeatherData(GenerateRequestURL(Constants.OpenWeatherMapEndpoint));
+
+        BindingContext = weatherData;
+    }
+    
+    string GenerateRequestURL(string endPoint)
+    {
+        string culture = CultureInfo.CurrentUICulture.ToString();
+        int dashIndex = culture.IndexOf('-');
+        string requestUri = endPoint;
+        requestUri += $"?{$"lat={Entry.Latitude}&lon={Entry.Longitude}"}";
+        requestUri += "&units=metric";
+        requestUri += $"&lang={culture[..dashIndex]}";
+        requestUri += $"&APPID={Constants.OpenWeatherMapAPIKey}";
+        return requestUri;
     }
 }
