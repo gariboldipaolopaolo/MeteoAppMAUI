@@ -6,14 +6,14 @@
             <ToolbarItem Text="Add" Clicked="OnItemAdded" />
         </ContentPage.ToolbarItems>
 
-        <ListView x:Name="zlistView" Margin="20" ItemSelected="OnListItemSelected" ItemsSource="{Binding Entries}" HasUnevenRows="True">
+        <ListView x:Name="zlistView" Margin="20" ItemSelected="OnListItemSelected" ItemsSource="{Binding Entries}" HasUnevenRows="True" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
                             <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
-                            <Button Text="Delete" BackgroundColor="Red" Clicked="OnRemoveClicked"/>
+                            <Button Text="X" BackgroundColor="Red" Clicked="OnRemoveClicked" CornerRadius="50"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

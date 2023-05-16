@@ -31,6 +31,18 @@ namespace MeteoApp.Database
             var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "location.db");
             _database = new SQLiteConnection(dbPath);
             _database.CreateTable<Entry>();
+            
+            //se necessario per cancellare db
+            /*if (File.Exists(dbPath))
+            {
+                File.Delete(dbPath);
+                Console.WriteLine("Database cancellato con successo.");
+            }
+            else
+            {
+                Console.WriteLine("Il database non esiste.");
+            }*/
+
         }
 
         public List<Entry> GetEntries()

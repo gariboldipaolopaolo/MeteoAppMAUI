@@ -1,4 +1,5 @@
-﻿using MeteoApp.Database;
+﻿using CommunityToolkit.Maui.Alerts;
+using MeteoApp.Database;
 
 namespace MeteoApp;
 
@@ -12,10 +13,6 @@ public partial class MeteoListPage : Shell
 	{
 		InitializeComponent();
         RegisterRoutes();
-<<<<<<< HEAD
-        GetLocation(); 
-=======
->>>>>>> 2aa89f0 (Fix list add and delete actions)
         database = new LocationDatabase();
     }
 
@@ -30,7 +27,7 @@ public partial class MeteoListPage : Shell
         base.OnAppearing();
         var myPosition = await GetLocation();
 
-         entries = GetEntries();
+        entries = GetEntries();
 
         BindingContext = new MeteoListViewModel();
 
@@ -103,6 +100,8 @@ public partial class MeteoListPage : Shell
 
             Shell.Current.GoToAsync($"entrydetails", navigationParameter);
         }
+
+        zlistView.SelectedItem = null;
     }
 
     private void OnItemAdded(object sender, EventArgs e)
@@ -119,5 +118,9 @@ public partial class MeteoListPage : Shell
         var vm = BindingContext as MeteoListViewModel;
 
         vm.RemoveCommand.Execute(entry);
+
+        var message = "City removed!";
+        var toast = Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Long, 15);
+        toast.Show();
     }
 }

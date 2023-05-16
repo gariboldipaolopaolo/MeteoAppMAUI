@@ -43,7 +43,6 @@ namespace MeteoApp
                 return new Command<Entry>((entry) =>
                 {
                     Entries.Insert(0,entry);
-                    //database.SaveEntry(entry);
                 });
             }
         }
