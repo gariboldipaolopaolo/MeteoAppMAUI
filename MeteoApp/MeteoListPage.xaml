@@ -1,7 +1,7 @@
 ﻿<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MeteoApp.MeteoListPage">
-    <ContentPage>
+    <ContentPage Title="Meteo App SUPSI">
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="Add" Clicked="OnItemAdded" />
         </ContentPage.ToolbarItems>
@@ -13,7 +13,7 @@
                         <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
                             <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
-                            <Button Text="X" BackgroundColor="Red" Clicked="OnRemoveClicked" CornerRadius="50"/>
+                            <Button Text="X" BackgroundColor="Red" Clicked="OnRemoveClicked" CornerRadius="50" Margin="10"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

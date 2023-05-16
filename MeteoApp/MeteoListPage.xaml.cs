@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using Android.Util;
+using CommunityToolkit.Maui.Alerts;
 using MeteoApp.Database;
+using Plugin.LocalNotification;
 
 namespace MeteoApp;
 
@@ -7,6 +9,7 @@ public partial class MeteoListPage : Shell
 {
     private LocationDatabase database;
     private List<Entry> entries;
+    private static Location tempLocation;
     public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
 
     public MeteoListPage()
@@ -14,6 +17,8 @@ public partial class MeteoListPage : Shell
 		InitializeComponent();
         RegisterRoutes();
         database = new LocationDatabase();
+        Thread thread = new Thread(TrackUserLocation); 
+        thread.Start();
     }
 
     protected override async void OnAppearing()
@@ -46,6 +51,31 @@ public partial class MeteoListPage : Shell
         activityIndicator.IsRunning = false;
     }
 
+    static async void TrackUserLocation() { 
+        while(true)
+        {
+            var loc = await Geolocation.Default.GetLocationAsync(new GeolocationRequest
+            {
+                DesiredAccuracy = GeolocationAccuracy.Medium,
+                Timeout = TimeSpan.FromSeconds(10)
+            });
+
+            if (tempLocation != null && tempLocation.Latitude.ToString("N2") != loc.Latitude.ToString("N2") && tempLocation.Longitude.ToString("N2") != loc.Longitude.ToString("N2"))
+            {
+                var request = new NotificationRequest
+                {
+                    NotificationId = 1000,
+                    Subtitle = "Current location info",
+                    Title = $"Your location as changed. The new coordinates are: Latitude {loc.Latitude}, Longitude {loc.Longitude}"
+                };
+
+                await LocalNotificationCenter.Current.Show(request);
+            }
+            tempLocation = loc;
+            Thread.Sleep(120000);
+        }
+    }
+
     private List<Entry> GetEntries()
     {
         return  database.GetEntries();
@@ -53,14 +83,17 @@ public partial class MeteoListPage : Shell
 
     private async Task<Entry> GetLocation()
     {
-        Entry location = null;
+        Entry location = new Entry();
         try
         {
-            var loc = await Geolocation.Default.GetLocationAsync();
+            var loc = await Geolocation.Default.GetLocationAsync(new GeolocationRequest
+            {
+                DesiredAccuracy = GeolocationAccuracy.Medium,
+                Timeout = TimeSpan.FromSeconds(10)
+            });
+
             if (loc != null)
             {
-                Console.WriteLine($"{loc.Latitude} {loc.Longitude}{loc.Altitude}");
-
                 location.Name = "My position";
                 location.Longitude = loc.Longitude;
                 location.Latitude = loc.Latitude;
@@ -73,7 +106,7 @@ public partial class MeteoListPage : Shell
             Console.WriteLine(ex.ToString());
         }
 
-        return location;
+        return null;
     }
 
     private void RegisterRoutes()
