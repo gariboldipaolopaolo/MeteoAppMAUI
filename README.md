@@ -1,2 +1,2 @@
-# MeteoApp-Maui-Skeleton
- Skeleton for the MeteoApp (MAUI Version)
+# MeteoApp-Maui
+MeteoApp (MAUI Version)
